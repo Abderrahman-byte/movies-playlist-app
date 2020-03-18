@@ -63,4 +63,5 @@ class RegiterView(View) :
 
 # LOGOUT VIEW CLASS BASE
 def logout(request) :
-    return HttpResponse('<h1>Logged out</h1>')
+    logout(request)
+    return redirect(reverse('home'))
