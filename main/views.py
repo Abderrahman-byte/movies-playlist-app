@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 
 from .forms import CreateUserForm
 # Create your views here.
@@ -62,6 +62,6 @@ class RegiterView(View) :
             return render(request, 'main/register.html', { 'form': form })
 
 # LOGOUT VIEW CLASS BASE
-def logout(request) :
+def logoutView(request) :
     logout(request)
     return redirect(reverse('home'))
