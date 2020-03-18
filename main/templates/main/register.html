@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Playlist | Register</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 col-lg-5 mx-auto my-5">
+                <div class="card card-body">
+                    <h4 class="text-center card-title">Create Account</h4>
+                    <form method="POST" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+
+                        {% if messages %}
+                            {% for msg in messages%}
+                            <div class="alert alert-danger">{{ msg }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        <input type="submit" value="Register" class="btn btn-primary btn-block" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const inputs = document.querySelectorAll('.form-group>input')
+
+        for(let i = 0; i < inputs.length; i++) {
+            inputs[i].classList.add('form-control')
+        }
+
+    </script>
+</body>
+</html>
