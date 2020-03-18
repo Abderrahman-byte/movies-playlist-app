@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 
 import uuid
@@ -22,7 +21,18 @@ class Profil(models.Model) :
         return self.name
 
 class Playlist(models.Model) :
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    title = models.CharField(max_length=200, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    items = ArrayField(models.CharField(max_length=200))
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta :
+        constraints = [
+            models.UniqueConstraint(fields=['creator', 'title'], name='one_playlist_for_each_user')
+        ]
+
+class PlaylistItem(models.Model) :
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
+    item = models.CharField(max_length=200)
+    created_date = models.DateTimeField(auto_now_add=True)
