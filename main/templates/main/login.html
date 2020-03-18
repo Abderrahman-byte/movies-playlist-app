@@ -16,7 +16,9 @@
                         <h4 class="card-title text-center">Login</h4>
                         <form method="POST" action="{% url 'login' %}">
                             {% csrf_token %}
-
+                            {% if next %}
+                            <input type="hidden" name="next" value="{{next}}" /> 
+                            {% endif %}
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Username</label>
                                 <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>

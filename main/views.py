@@ -15,7 +15,8 @@ def index(request) :
 # LOGIN VIEW CLASS BASE
 class LoginView(View) :
     def get(self, request) :
-        return render(request, 'main/login.html')
+        next = request.GET.get('next')
+        return render(request, 'main/login.html', { 'next': next })
 
     def post(self, request) :
         next = request.POST.get('next')
