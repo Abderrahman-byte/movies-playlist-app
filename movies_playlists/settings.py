@@ -120,4 +120,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-TMBD_API_KEY = os.getenv('TMBD_API_KEY')
+TMDB_API_KEY = os.getenv('TMBD_API_KEY')
