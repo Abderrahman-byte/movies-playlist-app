@@ -4,7 +4,7 @@ from django.views import View
 
 # Create your views here.
 def index(request) :
-    return HttpResponse('<h1>Hello World!</h1>')
+    return render(request, 'main/index.html')
 
 class LoginView(View) :
     def get(self, request) :
