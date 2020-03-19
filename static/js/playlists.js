@@ -55,6 +55,7 @@ const renderTab = (title) => {
     anchorTab.setAttribute('data-toggle', 'tab')
     anchorTab.href = `#${title.replace(/\s/g, '_')}`
     anchorTab.textContent = title
+    anchorTab.id = `${title.replace(/\s/g, '_')}-tab`
 
     return anchorTab
 }
@@ -109,8 +110,8 @@ const setupUI = (list) => {
         renderPlaylist(playlist)
     })
 
-    const firstTab = document.getElementById(list[0].id + '-tab')
-    const firstPanel = document.getElementById(list[0].id)
+    const firstTab = document.getElementById(list[0].title.replace(/\s/g, '_') + '-tab')
+    const firstPanel = document.getElementById(list[0].title.replace(/\s/g, '_'))
 
     firstTab.classList.add('active')
     firstTab.setAttribute('aria-selected', 'true')
