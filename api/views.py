@@ -17,7 +17,7 @@ def trendingApi(request) :
             'status': '404', 
             'results': 'Invalid page: Pages start at 1 and max at 1000. They are expected to be an integer.'
         }
-        
+
         context = json.dumps(context)
         return HttpResponse(context, content_type='applications/json', status=404)
 

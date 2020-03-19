@@ -65,3 +65,7 @@ class RegiterView(View) :
 def logoutView(request) :
     logout(request)
     return redirect(reverse('home'))
+
+# Trending VIEW FUNCTION BASE
+def TrendingView(request) :
+    return render(request, 'main/trending.html')
