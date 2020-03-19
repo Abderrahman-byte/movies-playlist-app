@@ -33,6 +33,12 @@ class Playlist(models.Model) :
         ]
 
 class PlaylistItem(models.Model) :
+    MEDIA_TYPE = (
+        ('movie', 'Movie'),
+        ('tv', 'Tv Show')
+    )
+
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
-    item = models.CharField(max_length=200)
+    item_id = models.CharField(max_length=200)
+    media_type = models.CharField(max_length=200, choices=MEDIA_TYPE, default='movie')
     created_date = models.DateTimeField(auto_now_add=True)
