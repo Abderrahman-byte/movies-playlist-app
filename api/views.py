@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse
+from django.views import View
 
 import requests as fetcher
 import json
@@ -56,3 +57,14 @@ def playlistsApi(request) :
 
     context = json.dumps(playlists) 
     return HttpResponse(context, content_type='application/json')
+
+class deleteItemFromPlaylist(View) :
+    def post(self, request, id) :
+        item_id = request.POST.get('item_id')
+        try :
+            playlist = Playlist.objects.get(pk=id) 
+            item = playlist.playlistitem_set.get(item_id=item_id)
+            item.delete()
+            return HttpResponse(f'item {item_id} delete from {playlist.title}', status=201)
+        except Exception as ex :
+            return HttpResponse(ex, status=403)
