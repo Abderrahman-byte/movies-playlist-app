@@ -5,8 +5,11 @@ from django.urls import reverse
 
 import requests as fetcher
 import json
+from datetime import datetime
 
 # Create your views here.
+from main.models import Playlist
+
 def trendingApi(request) :
     page = request.GET.get('page', 1)
     key = settings.TMDB_API_KEY
@@ -23,3 +26,24 @@ def trendingApi(request) :
 
     res = fetcher.get(url)
     return HttpResponse(res.text, content_type='application/json')
+
+def playlistsApi(request) :
+    playlists = list()
+
+    for playlist in request.user.playlist_set.all() :
+        pl = {
+            'title': playlist.title,
+            'username': playlist.creator.username,
+            'created_date': round(datetime.timestamp(playlist.created_date) * 1000),
+            'updated_date': round(datetime.timestamp(playlist.updated_date) * 1000),
+            'items' : list()
+        }
+        
+        print(playlist.playlistitem_set.all())
+
+        playlists.append(pl)
+
+    print(playlists)
+    context = {}
+    context = json.dumps(context) 
+    return HttpResponse(context, content_type='application/json')
