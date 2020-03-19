@@ -32,6 +32,9 @@ class Playlist(models.Model) :
             models.UniqueConstraint(fields=['creator', 'title'], name='one_playlist_for_each_user')
         ]
 
+    def __str__(self) :
+        return f'{self.title} by {self.creator.username}'
+
 class PlaylistItem(models.Model) :
     MEDIA_TYPE = (
         ('movie', 'Movie'),
@@ -42,3 +45,6 @@ class PlaylistItem(models.Model) :
     item_id = models.CharField(max_length=200)
     media_type = models.CharField(max_length=200, choices=MEDIA_TYPE, default='movie')
     created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) :
+        return f'{self.media_type} id {self.item_id} in {self.playlist.title}'

@@ -28,22 +28,31 @@ def trendingApi(request) :
     return HttpResponse(res.text, content_type='application/json')
 
 def playlistsApi(request) :
+    key = settings.TMDB_API_KEY
     playlists = list()
 
     for playlist in request.user.playlist_set.all() :
         pl = {
+            'id': str(playlist.uid),
             'title': playlist.title,
             'username': playlist.creator.username,
             'created_date': round(datetime.timestamp(playlist.created_date) * 1000),
             'updated_date': round(datetime.timestamp(playlist.updated_date) * 1000),
+            'items_count' : playlist.playlistitem_set.all().count(),
             'items' : list()
         }
-        
-        print(playlist.playlistitem_set.all())
+
+        for item in playlist.playlistitem_set.all() :
+            if item.media_type == 'movie' :
+                url = f'https://api.themoviedb.org/3/movie/{item.item_id}?api_key={key}'
+            elif item.media_type == 'tv' :
+                url = f'https://api.themoviedb.org/3/tv/{item.item_id}?api_key={key}'
+
+            res = fetcher.get(url)
+            result = json.loads(res.text)
+            pl['items'].append(result)
 
         playlists.append(pl)
 
-    print(playlists)
-    context = {}
-    context = json.dumps(context) 
+    context = json.dumps(playlists) 
     return HttpResponse(context, content_type='application/json')
