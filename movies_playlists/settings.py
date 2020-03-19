@@ -125,4 +125,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+# TMBD API KEY FROM ENVIRONMENT VARIABLES
 TMDB_API_KEY = os.getenv('TMBD_API_KEY')
