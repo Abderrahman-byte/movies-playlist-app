@@ -69,3 +69,6 @@ def logoutView(request) :
 # Trending VIEW FUNCTION BASE
 def TrendingView(request) :
     return render(request, 'main/trending.html')
+
+def playlistsView(request) :
+    return render(request, 'main/playlists.html')

@@ -8,5 +8,6 @@ urlpatterns = [
     path('register/', views.RegiterView.as_view(), name='register'),
     path('logout/', views.logoutView, name='logout'),
 
-    path('trending/', views.TrendingView, name='trending')
+    path('trending/', views.TrendingView, name='trending'),
+    path('playlists/', views.playlistsView, name='playlists'),
 ]
