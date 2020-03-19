@@ -1,7 +1,8 @@
 const playlistTab = document.getElementById('playlists_tab')
 const playlistTabContent = document.getElementById('playlists_tab_content')
 
-const renderMovie = (movie) => {
+const renderMovie = (movie, uid) => {
+    console.log(movie)
     const posterCol = document.createElement('td')
 
     if(movie.poster_path !== null) {
@@ -34,6 +35,29 @@ const renderMovie = (movie) => {
 
     addToBtnCol.appendChild(addToBtn)
 
+    const deleteCol = document.createElement('td')
+    deleteCol.className = 'btn_row'
+    const deleteBtn = document.createElement('button')
+    deleteBtn.textContent = 'Remove'
+    deleteBtn.className = 'btn btn-danger'
+    deleteCol.appendChild(deleteBtn)
+
+    deleteBtn.addEventListener('click', () => {
+        const url = `/api/playlist/${uid}/`
+        data = {
+            item_id: movie.id,
+            media_type: movie.media_type
+        }
+        fetch(url, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            data: JSON.stringify(data)
+        })
+        .then(() => console.log('item deleted'))
+    })
+
     const row = document.createElement('tr')
     row.setAttribute('data-id', movie.id)
 
@@ -44,6 +68,7 @@ const renderMovie = (movie) => {
     row.appendChild(voteCol)
     row.appendChild(detailBtnCol)
     row.appendChild(addToBtnCol)
+    row.appendChild(deleteCol)
 
     return row
 }
@@ -60,10 +85,10 @@ const renderTab = (title) => {
     return anchorTab
 }
 
-const renderTabContent = (title, list) => {
+const renderTabContent = (title, list, uid) => {
     const tbody = document.createElement('tbody')
     list.forEach(movie => {
-        tbody.appendChild(renderMovie(movie))
+        tbody.appendChild(renderMovie(movie, uid))
     })
 
     const tableHead = `<thead>
@@ -99,7 +124,7 @@ const renderPlaylist = (playlist) => {
     const mediaList = playlist.items
 
     playlistTab.appendChild(renderTab(title))
-    playlistTabContent.appendChild(renderTabContent(title, mediaList))
+    playlistTabContent.appendChild(renderTabContent(title, mediaList, uid))
 }
 
 const setupUI = (list) => {

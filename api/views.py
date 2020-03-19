@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 import requests as fetcher
 import json
@@ -51,6 +52,7 @@ def playlistsApi(request) :
 
             res = fetcher.get(url)
             result = json.loads(res.text)
+            result = {'media_type': item.media_type, **result}
             pl['items'].append(result)
 
         playlists.append(pl)
@@ -58,13 +60,18 @@ def playlistsApi(request) :
     context = json.dumps(playlists) 
     return HttpResponse(context, content_type='application/json')
 
-class deleteItemFromPlaylist(View) :
-    def post(self, request, id) :
-        item_id = request.POST.get('item_id')
-        try :
-            playlist = Playlist.objects.get(pk=id) 
-            item = playlist.playlistitem_set.get(item_id=item_id)
-            item.delete()
-            return HttpResponse(f'item {item_id} delete from {playlist.title}', status=201)
-        except Exception as ex :
-            return HttpResponse(ex, status=403)
+@csrf_exempt
+def deleteItemFromPlaylist(request, id) :
+    if request.method == 'POST' :
+        body = request.body
+        print(body)
+
+        return HttpResponse('')
+        # try :
+        #     playlist = Playlist.objects.get(pk=id) 
+        #     item = playlist.playlistitem_set.get(item_id=item_id, media_type=media_type)
+        #     item.delete()
+        #     print('item deleted')
+        #     return HttpResponse(f'item {item_id} delete from {playlist.title}', status=201)
+        # except Exception as ex :
+        #     return HttpResponse(ex, status=403)
