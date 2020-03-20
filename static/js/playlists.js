@@ -1,6 +1,25 @@
 const playlistTab = document.getElementById('playlists_tab')
 const playlistTabContent = document.getElementById('playlists_tab_content')
 
+const deleteFromPlaylist = (movie, uid) => {
+    const url = `/api/playlist/${uid}/`
+    data = { item_id: movie.id, media_type: movie.media_type }
+
+    fetch(url, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    })
+    .then((res) => console.log(res))
+    .then(() => {
+        const rowDeleted = document.querySelector(`[data-id="${movie.id}"][data-media-type="${movie.media_type}"]`)
+        rowDeleted.parentNode.removeChild(rowDeleted)
+    })
+    .catch((err) => console.log(err))
+}
+
 const renderMovie = (movie, uid) => {
     console.log(movie)
     const posterCol = document.createElement('td')
@@ -43,22 +62,7 @@ const renderMovie = (movie, uid) => {
     deleteCol.appendChild(deleteBtn)
 
     deleteBtn.addEventListener('click', () => {
-        const url = `/api/playlist/${uid}/`
-        data = { item_id: movie.id, media_type: movie.media_type }
-
-        fetch(url, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(data)
-        })
-        .then((res) => console.log(res))
-        .then(() => {
-            const rowDeleted = document.querySelector(`[data-id="${movie.id}"][data-media-type="${movie.media_type}"]`)
-            rowDeleted.parentNode.removeChild(rowDeleted)
-        })
-        .catch((err) => console.log(err))
+        deleteFromPlaylist(movie, uid)
     })
 
     const row = document.createElement('tr')
@@ -75,6 +79,18 @@ const renderMovie = (movie, uid) => {
     row.appendChild(deleteCol)
 
     return row
+}
+
+const renderDeletPlaylistBtn = (uid) => {
+    const btnDel = document.createElement('button')
+    btnDel.className = 'btn btn-danger mx-auto'
+    btnDel.textContent = 'Delete Playlist'
+
+    const btnDiv = document.createElement('div')
+    btnDiv.className = 'col-12 my-3'
+    btnDiv.appendChild(btnDel)
+
+    return btnDiv
 }
 
 
@@ -118,6 +134,7 @@ const renderTabContent = (title, list, uid) => {
     contentDiv.id = title.replace(/\s/g, '_')
 
     contentDiv.appendChild(table)
+    contentDiv.appendChild(renderDeletPlaylistBtn(uid))
 
     return contentDiv
 } 

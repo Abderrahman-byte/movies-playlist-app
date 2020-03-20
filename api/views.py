@@ -71,6 +71,16 @@ def deleteItemFromPlaylist(request, id) :
             playlist = Playlist.objects.get(pk=id) 
             item = playlist.playlistitem_set.get(item_id=item_id, media_type=media_type)
             item.delete()
-            return HttpResponse(f'item {item_id} delete from {playlist.title}', status=201)
+            return HttpResponse(f'item {item_id} deleted from {playlist.title}', status=201)
+        except Exception as ex :
+            return HttpResponse(ex, status=403)
+
+@csrf_exempt
+def deletePlaylist(request, id) :
+    if request.method == 'POST' :
+        try :
+            playlist = Playlist.objects.get(pk=id)
+            playlist.delete()
+            return HttpResponse(f'playlist {id} deleted', status=201)
         except Exception as ex :
             return HttpResponse(ex, status=403)
