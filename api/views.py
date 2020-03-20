@@ -84,3 +84,16 @@ def deletePlaylist(request, id) :
             return HttpResponse(f'playlist {id} deleted', status=201)
         except Exception as ex :
             return HttpResponse(ex, status=403)
+
+def PlaylistLiteView(request) :
+    playlists = request.user.playlist_set.all()
+    context = [
+        {
+            'uid': str(playlist.uid),
+            'title': playlist.title,
+            'items_count': playlist.playlistitem_set.all().count()
+        } for playlist in playlists
+    ]
+
+    context = json.dumps(context)
+    return HttpResponse(context, content_type='application/json')

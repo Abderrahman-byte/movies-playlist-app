@@ -1,4 +1,5 @@
 const container = document.getElementById('tending_list_container')
+const playlistModel = document.getElementById('playlist_model_body')
 
 let currentDataPage = 1
 let isLoading = false
@@ -24,6 +25,29 @@ const removeSkeltons = () => {
     skeltons.forEach(skelton => {
         skelton.parentNode.removeChild(skelton)
     })
+}
+
+const renderPlaylistBtn = (playlist) => {
+    const btn = document.createElement('button')
+    btn.className = 'btn btn-info'
+    btn.textContent = `add to ${playlist.title}`
+
+    const btnDiv = document.createElement('div')
+    btnDiv.className = 'row my-1 px-2'
+    btnDiv.appendChild(btn)
+
+    return btnDiv
+}
+
+const showPlaylists = () => {
+    fetch('/api/playlists_lite/')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(playlist => {
+            playlistModel.appendChild(renderPlaylistBtn(playlist))
+        })
+    })
+    .catch(err => console.log(err))
 }
 
 const renderMovie = (movie) => {
@@ -56,8 +80,13 @@ const renderMovie = (movie) => {
     const addToBtn = document.createElement('button')
     addToBtn.textContent = 'Add To'
     addToBtn.className = 'btn btn-primary'
+    addToBtn.setAttribute('data-toggle', 'modal')
+    addToBtn.setAttribute('data-target', '#playlist_model')
 
     addToBtnCol.appendChild(addToBtn)
+    addToBtn.addEventListener('click', () => {
+        showPlaylists(movie)
+    })
 
     const row = document.createElement('tr')
     row.setAttribute('data-id', movie.id)
