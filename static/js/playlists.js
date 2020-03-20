@@ -20,6 +20,19 @@ const deleteFromPlaylist = (movie, uid) => {
     .catch((err) => console.log(err))
 }
 
+const deletePlaylist = (uid, title) => {
+    const url = `/api/playlists/${uid}/delete/`
+    fetch(url, { method: 'POST' })
+    .then(() => {
+        const plTab = document.getElementById(title.replace(/\s/g, '_'))
+        const plContent = document.getElementById(`${title.replace(/\s/g, '_')}-tab`)
+
+        plTab.parentNode.removeChild(plTab)
+        plContent.parentNode.removeChild(plContent)
+    })
+    .catch(err => console.error(err))
+}
+
 const renderMovie = (movie, uid) => {
     console.log(movie)
     const posterCol = document.createElement('td')
@@ -81,10 +94,14 @@ const renderMovie = (movie, uid) => {
     return row
 }
 
-const renderDeletPlaylistBtn = (uid) => {
+const renderDeletPlaylistBtn = (uid, title) => {
     const btnDel = document.createElement('button')
     btnDel.className = 'btn btn-danger mx-auto'
     btnDel.textContent = 'Delete Playlist'
+
+    btnDel.addEventListener('click', () => {
+        deletePlaylist(uid, title)
+    })
 
     const btnDiv = document.createElement('div')
     btnDiv.className = 'col-12 my-3'
@@ -134,7 +151,7 @@ const renderTabContent = (title, list, uid) => {
     contentDiv.id = title.replace(/\s/g, '_')
 
     contentDiv.appendChild(table)
-    contentDiv.appendChild(renderDeletPlaylistBtn(uid))
+    contentDiv.appendChild(renderDeletPlaylistBtn(uid, title))
 
     return contentDiv
 } 
