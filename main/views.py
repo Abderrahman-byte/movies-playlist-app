@@ -4,8 +4,11 @@ from django.views import View
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
+from django.forms import inlineformset_factory
+from django.contrib.auth.models import User
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, CreatePlaylistForm
+from .models import Playlist
 # Create your views here.
 
 # HOME VIEW FUNCTION BASE
@@ -70,5 +73,44 @@ def logoutView(request) :
 def TrendingView(request) :
     return render(request, 'main/trending.html')
 
+# Playlists VIEW FUNCTION BASE
 def playlistsView(request) :
     return render(request, 'main/playlists.html')
+
+def CreatePlaylistView(request) :
+    if request.method == 'GET' :
+        form = CreatePlaylistForm()
+        return render(request, 'main/create_playlist.html', {'form': form})
+
+    if request.method == 'POST' :
+        form = CreatePlaylistForm(request.POST)
+        user = request.user
+        
+        if user.playlist_set.all().count() >= 5 :
+            messages.error(request, 'You Cannot Have More Than 5 Playlists.')
+            return render(request, 'main/create_playlist.html', {'form': form}) 
+        
+        try :
+            Playlist(title=request.POST['title'], creator=user).save()
+            return redirect(reverse('playlists'))
+        except Exception as ex :
+            messages.error(request, ex)
+            return render(request, 'main/create_playlist.html', {'form': form}) 
+
+def EditPlaylistView(request, id) :
+    if request.method == 'GET' :
+        playlist = Playlist.objects.get(pk=id)
+        form = CreatePlaylistForm(instance=playlist)
+        
+        return render(request, 'main/edit_playlist.html', { 'form': form })
+
+    if request.method == 'POST' :
+        playlist = Playlist.objects.get(pk=id)
+        form = CreatePlaylistForm(request.POST, instance=playlist, initial={ 'user': request.user })
+
+        try :
+            form.save()
+            return redirect(reverse('playlists'))
+        except Exception as ex :
+            messages.error(request, ex)
+            return render(request, 'main/create_playlist.html', {'form': form})

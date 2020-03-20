@@ -10,10 +10,17 @@
 
 <div class="row">
     <div class="col">
-        <nav class="nav nav-tabs" id="playlists_tab" role="tablist"></nav>
+        <nav class="nav nav-pills" id="playlists_tab" role="tablist"></nav>
         <div class="tab-content py-3 px-3" id="playlists_tab_content"></div>
     </div>
 </div>
 
+<div class="row">
+    <div class="col">
+        <div class="card card-body">
+            <a href="{% url 'create_playlist' %}" class="btn btn-primary">new playlist</a>
+        </div>
+    </div>
+</div>
 <script src="{% static 'js/playlists.js' %}"></script>
 {% endblock %}

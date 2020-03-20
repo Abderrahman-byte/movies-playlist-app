@@ -23,7 +23,7 @@ class Profil(models.Model) :
 class Playlist(models.Model) :
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4)
     title = models.CharField(max_length=200, null=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

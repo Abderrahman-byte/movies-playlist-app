@@ -103,9 +103,15 @@ const renderDeletPlaylistBtn = (uid, title) => {
         deletePlaylist(uid, title)
     })
 
+    const editBtn = document.createElement('a')
+    editBtn.textContent = 'edit playlist'
+    editBtn.href = `/playlists/${uid}/edit/`
+    editBtn.className = 'btn btn-warning mx-3'
+
     const btnDiv = document.createElement('div')
     btnDiv.className = 'col-12 my-3'
     btnDiv.appendChild(btnDel)
+    btnDiv.appendChild(editBtn)
 
     return btnDiv
 }

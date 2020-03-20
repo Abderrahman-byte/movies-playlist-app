@@ -1,0 +1,31 @@
+{% extends 'main/generic.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-lg-4 mx-auto my-5">
+        <div class="card card-body">
+            <h1 class="card-title">Create Playlist</h1>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    {{field.label}}
+                    {{field}}
+                </div>
+                {% endfor %}
+
+                {% if messages %}
+                {% for msg in messages %}
+                <div class="alert alert-danger">
+                    {{msg}}
+                </div>
+                {% endfor %}
+                {% endif %}
+               
+
+                <input value="Create" type="submit" class="btn btn-primary" />
+            </form>
+        </div>
+    </div>
+</div> 
+{% endblock %}
