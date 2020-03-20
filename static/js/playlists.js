@@ -44,22 +44,26 @@ const renderMovie = (movie, uid) => {
 
     deleteBtn.addEventListener('click', () => {
         const url = `/api/playlist/${uid}/`
-        data = {
-            item_id: movie.id,
-            media_type: movie.media_type
-        }
+        data = { item_id: movie.id, media_type: movie.media_type }
+
         fetch(url, {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            data: JSON.stringify(data)
+            body: JSON.stringify(data)
         })
-        .then(() => console.log('item deleted'))
+        .then((res) => console.log(res))
+        .then(() => {
+            const rowDeleted = document.querySelector(`[data-id="${movie.id}"][data-media-type="${movie.media_type}"]`)
+            rowDeleted.parentNode.removeChild(rowDeleted)
+        })
+        .catch((err) => console.log(err))
     })
 
     const row = document.createElement('tr')
     row.setAttribute('data-id', movie.id)
+    row.setAttribute('data-media-type', movie.media_type)
 
     row.appendChild(posterCol)
     row.appendChild(titleCol)

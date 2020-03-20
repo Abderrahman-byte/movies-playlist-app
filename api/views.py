@@ -63,15 +63,14 @@ def playlistsApi(request) :
 @csrf_exempt
 def deleteItemFromPlaylist(request, id) :
     if request.method == 'POST' :
-        body = request.body
-        print(body)
+        body = json.loads(request.body)
+        item_id = str(body['item_id'])
+        media_type = body['media_type']
 
-        return HttpResponse('')
-        # try :
-        #     playlist = Playlist.objects.get(pk=id) 
-        #     item = playlist.playlistitem_set.get(item_id=item_id, media_type=media_type)
-        #     item.delete()
-        #     print('item deleted')
-        #     return HttpResponse(f'item {item_id} delete from {playlist.title}', status=201)
-        # except Exception as ex :
-        #     return HttpResponse(ex, status=403)
+        try :
+            playlist = Playlist.objects.get(pk=id) 
+            item = playlist.playlistitem_set.get(item_id=item_id, media_type=media_type)
+            item.delete()
+            return HttpResponse(f'item {item_id} delete from {playlist.title}', status=201)
+        except Exception as ex :
+            return HttpResponse(ex, status=403)
