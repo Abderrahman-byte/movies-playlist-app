@@ -1,5 +1,25 @@
 {% extends 'main/generic.html' %}
+
 {% block content %}
+{% load static %}
+<div class="modal fade" id="playlists_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" id="close_model" >&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="playlists_model_body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 <div class="row my-5">
     <div class="col-lg-4 col-md-5 mb-3">
         <img class="img-fluid" width="100%" src="https://image.tmdb.org/t/p/w500{{media.backdrop_path}}" />
@@ -41,11 +61,23 @@
                     
                     <p class="col-lg-10 px-0">{{ media.overview }} </p>
 
-                    {% if media.homepage %}
-                    <a class="btn btn-info" target="_blank" href="{{media.homepage}}">Website</a>
-                    {% endif %}
+                    <div class="row">
+                        {% if media.homepage %}
+                        <a class="btn btn-info mx-3" target="_blank" href="{{media.homepage}}">Website</a>
+                        {% endif %}
+                        <button data-toggle="modal" data-target="#playlists_model" id="add_to_btn" class="btn btn-primary mx-3">add to</button>
+                    </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="application/javascript">
+    const False = false
+    const True = true
+    const None = null
+    const media = {{ media|safe }}
+</script>
+
+<script src="{% static 'js/details.js' %}"></script>
 {% endblock %}
