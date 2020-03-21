@@ -6,9 +6,10 @@ import uuid
 # Create your models here.
 class Profil(models.Model) :
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
+    avatar_img = models.ImageField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta :

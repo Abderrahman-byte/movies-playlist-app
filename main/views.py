@@ -11,8 +11,8 @@ from django.conf import settings
 import requests as fetcher
 import json
 
-from .forms import CreateUserForm, CreatePlaylistForm
-from .models import Playlist
+from .forms import CreateUserForm, CreatePlaylistForm, ProfilForm
+from .models import Playlist, Profil
 # Create your views here.
 
 # HOME VIEW FUNCTION BASE
@@ -131,3 +131,8 @@ def mediaDetailsView(request, media_type, id) :
         return render(request, 'main/details.html', context)
     else :
         return render(request, 'main/Notfound.html')
+
+def profilView(request) :
+    user = Profil.objects.get(user=request.user)
+    form = ProfilForm(instance=user)
+    return render(request, 'main/profil.html', { 'form': form })
