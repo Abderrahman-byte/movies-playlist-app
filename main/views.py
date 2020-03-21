@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.forms import inlineformset_factory
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 import requests as fetcher
 import json
@@ -22,6 +23,8 @@ def index(request) :
 # LOGIN VIEW CLASS BASE
 class LoginView(View) :
     def get(self, request) :
+        if request.user.is_authenticated :
+            return redirect(reverse('profil'))
         next = request.GET.get('next')
         return render(request, 'main/login.html', { 'next': next })
 
@@ -47,6 +50,8 @@ class LoginView(View) :
 # REGISTER VIEW CLASS BASE
 class RegiterView(View) :
     def get(self, request) :
+        if request.user.is_authenticated :
+            return redirect(reverse('profil'))
         form = CreateUserForm()
 
         context = { 'form': form }
@@ -74,13 +79,16 @@ def logoutView(request) :
     return redirect(reverse('home'))
 
 # Trending VIEW FUNCTION BASE
+@login_required(login_url='/login/')
 def TrendingView(request) :
     return render(request, 'main/trending.html')
 
 # Playlists VIEW FUNCTION BASE
+@login_required(login_url='/login/')
 def playlistsView(request) :
     return render(request, 'main/playlists.html')
 
+@login_required(login_url='/login/')
 def CreatePlaylistView(request) :
     if request.method == 'GET' :
         form = CreatePlaylistForm()
@@ -101,6 +109,7 @@ def CreatePlaylistView(request) :
             messages.error(request, ex)
             return render(request, 'main/create_playlist.html', {'form': form}) 
 
+@login_required(login_url='/login/')
 def EditPlaylistView(request, id) :
     if request.method == 'GET' :
         playlist = Playlist.objects.get(pk=id)
@@ -119,6 +128,7 @@ def EditPlaylistView(request, id) :
             messages.error(request, ex)
             return render(request, 'main/create_playlist.html', {'form': form})
 
+@login_required(login_url='/login/')
 def mediaDetailsView(request, media_type, id) :
     api_key = settings.TMDB_API_KEY
     url = f'https://api.themoviedb.org/3/{media_type}/{id}?api_key={api_key}'
@@ -132,11 +142,7 @@ def mediaDetailsView(request, media_type, id) :
     else :
         return render(request, 'main/Notfound.html')
 
-def handle_uploaded_file(f):
-    with open('C:/Users/ENVY/Desktop/name.txt', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
+@login_required(login_url='/login/')
 def profilView(request) :
     user = Profil.objects.get(user=request.user)
     form = ProfilForm(instance=user)

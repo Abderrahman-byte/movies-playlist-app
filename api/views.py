@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 import requests as fetcher
 import json
@@ -12,6 +13,7 @@ from datetime import datetime
 # Create your views here.
 from main.models import Playlist, PlaylistItem
 
+@login_required(login_url='/login/')
 def trendingApi(request) :
     page = request.GET.get('page', 1)
     key = settings.TMDB_API_KEY
@@ -29,6 +31,7 @@ def trendingApi(request) :
     res = fetcher.get(url)
     return HttpResponse(res.text, content_type='application/json')
 
+@login_required(login_url='/login/')
 def playlistsApi(request) :
     key = settings.TMDB_API_KEY
     playlists = list()
@@ -60,6 +63,7 @@ def playlistsApi(request) :
     context = json.dumps(playlists) 
     return HttpResponse(context, content_type='application/json')
 
+@login_required(login_url='/login/')
 @csrf_exempt
 def deleteItemFromPlaylist(request, id) :
     if request.method == 'POST' :
@@ -75,6 +79,7 @@ def deleteItemFromPlaylist(request, id) :
         except Exception as ex :
             return HttpResponse(ex, status=403)
 
+@login_required(login_url='/login/')
 @csrf_exempt
 def deletePlaylist(request, id) :
     if request.method == 'POST' :
@@ -85,6 +90,7 @@ def deletePlaylist(request, id) :
         except Exception as ex :
             return HttpResponse(ex, status=403)
 
+@login_required(login_url='/login/')
 def PlaylistLiteView(request) :
     playlists = request.user.playlist_set.all()
     context = [
@@ -98,6 +104,7 @@ def PlaylistLiteView(request) :
     context = json.dumps(context)
     return HttpResponse(context, content_type='application/json')
 
+@login_required(login_url='/login/')
 @csrf_exempt
 def addToPlaylistView(request, id) :
     if request.method == 'POST' :
