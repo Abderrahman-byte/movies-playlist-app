@@ -6,6 +6,10 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.forms import inlineformset_factory
 from django.contrib.auth.models import User
+from django.conf import settings
+
+import requests as fetcher
+import json
 
 from .forms import CreateUserForm, CreatePlaylistForm
 from .models import Playlist
@@ -114,3 +118,17 @@ def EditPlaylistView(request, id) :
         except Exception as ex :
             messages.error(request, ex)
             return render(request, 'main/create_playlist.html', {'form': form})
+
+def mediaDetailsView(request, media_type, id) :
+    api_key = settings.TMDB_API_KEY
+    url = f'https://api.themoviedb.org/3/{media_type}/{id}?api_key={api_key}'
+    
+    req = fetcher.get(url)
+    details = json.loads(req.text)
+
+    if req.status_code == 200 :
+        context = {'media': {'media_type': media_type, **details} }
+        return render(request, 'main/details.html', context)
+    else :
+        context = { 'media': { 'status' : req.status_code} }
+        return render(request, 'main/details.html', context)

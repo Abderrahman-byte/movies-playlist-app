@@ -102,14 +102,12 @@ def PlaylistLiteView(request) :
 def addToPlaylistView(request, id) :
     if request.method == 'POST' :
         body = json.loads(request.body)
-        print(body)
         item_id = body['item_id']
         media_type = body['media_type']
 
         try :
             playlist = Playlist.objects.get(pk=id)
             PlaylistItem(item_id=item_id, media_type=media_type, playlist=playlist).save()
-            print('item added')
         except :
             pass
 
