@@ -54,6 +54,19 @@ const renderPlaylistBtn = (playlist, movie) => {
     return btnDiv
 }
 
+const renderCreatePlBtn = () => {
+    const btn = document.createElement('a')
+    btn.className = 'btn btn-secondary'
+    btn.textContent = 'Create new playlist'
+    btn.href = '/playlists/add/'
+
+    const btnDiv = document.createElement('div')
+    btnDiv.className = 'row my-1 px-2'
+    btnDiv.appendChild(btn)
+
+    return btnDiv
+}
+
 const showPlaylists = (movie) => {
     fetch('/api/playlists_lite/')
     .then(res => res.json())
@@ -62,6 +75,8 @@ const showPlaylists = (movie) => {
         data.forEach(playlist => {
             playlistModel.appendChild(renderPlaylistBtn(playlist, movie))
         })
+        
+        playlistModel.appendChild(renderCreatePlBtn())
     })
     .catch(err => console.log(err))
 }
