@@ -104,7 +104,7 @@ const renderMovie = (movie) => {
     voteCol.textContent = movie.vote_average
 
     const detailBtnCol = document.createElement('td')
-    detailBtnCol.innerHTML = `<a class="btn btn-info" href="#">Details</a>`
+    detailBtnCol.innerHTML = `<a class="btn btn-info" href="/details/${movie.media_type}/${movie.id}/">Details</a>`
 
     const addToBtnCol = document.createElement('td')
     addToBtnCol.className = 'btn_row'
