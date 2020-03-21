@@ -17,17 +17,29 @@
             <h4 class="card-title text-center">Settings</h4>
             <hr>
             <form method="POST" action="" enctype="multipart/form-data" >
+                {% csrf_token %}
                 {% for field in form %}
                 <div class="form-group">
-                    {% csrf_token %}
-                    {{ field.label }}
+                    
+                    <label for='id_{{field.name}}'>{{ field.label }}</label>
                     {{ field }}
-                    {% endfor %}
+                    
                 </div>
+                {% endfor %}
                 <input type="submit" class="btn btn-primary" value="save" />
             </form>
         </div>
     </div>
 </div>
 
+<script>
+    const inputs = document.querySelectorAll('input')
+
+    inputs.forEach(input => {
+        if(input.type === 'email' || input.type === 'text') {
+            input.classList.add('form-control')
+        }
+    })
+
+</script>
 {% endblock %}
