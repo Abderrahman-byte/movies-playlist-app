@@ -1,8 +1,33 @@
 {% extends 'main/generic.html' %}
 
 {% block content %}
-<form >
-    {{ form }}
-    <input class="btn btn-primary" value="save" />
-</form>
+<div class="row my-3">
+    <div class="col-md-4">
+        <div class="card card-body">
+            <a href="{% url 'trending' %}" class="btn btn-warning">Go back</a>
+            <hr />
+            <img width="50%" src="/images/{{request.user.profil.avatar_img}}" class="img-fluid mx-auto" />
+            <hr />
+            <h5 class="card-title text-center">Profil</h5>
+        </div>
+        
+    </div>
+    <div class="col-md-8">
+        <div class="card card-body">
+            <h4 class="card-title text-center">Settings</h4>
+            <hr>
+            <form method="POST" action="" enctype="multipart/form-data" >
+                {% for field in form %}
+                <div class="form-group">
+                    {% csrf_token %}
+                    {{ field.label }}
+                    {{ field }}
+                    {% endfor %}
+                </div>
+                <input type="submit" class="btn btn-primary" value="save" />
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

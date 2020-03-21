@@ -132,7 +132,23 @@ def mediaDetailsView(request, media_type, id) :
     else :
         return render(request, 'main/Notfound.html')
 
+def handle_uploaded_file(f):
+    with open('C:/Users/ENVY/Desktop/name.txt', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
 def profilView(request) :
     user = Profil.objects.get(user=request.user)
     form = ProfilForm(instance=user)
+    
+    if request.method == 'POST' :
+        form = ProfilForm(request.POST, request.FILES, instance=user)
+
+        if form.is_valid() :
+            form.save()
+            return redirect(reverse('profil'))
+        else :
+            for error in form.errors :
+                messages.error(request, form.errors.get(error))
+
     return render(request, 'main/profil.html', { 'form': form })

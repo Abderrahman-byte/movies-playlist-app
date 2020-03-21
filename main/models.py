@@ -9,7 +9,7 @@ class Profil(models.Model) :
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
-    avatar_img = models.ImageField(null=True, blank=True)
+    avatar_img = models.ImageField(default='default.png', null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta :

@@ -18,3 +18,4 @@ class ProfilForm(forms.ModelForm) :
     class Meta :
         model = Profil
         fields = '__all__'
+        exclude = ['uid', 'user']
