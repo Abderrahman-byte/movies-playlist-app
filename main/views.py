@@ -130,5 +130,4 @@ def mediaDetailsView(request, media_type, id) :
         context = {'media': {'media_type': media_type, **details} }
         return render(request, 'main/details.html', context)
     else :
-        context = { 'media': { 'status' : req.status_code} }
-        return render(request, 'main/details.html', context)
+        return render(request, 'main/Notfound.html')

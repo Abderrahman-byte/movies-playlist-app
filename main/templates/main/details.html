@@ -1,4 +1,51 @@
 {% extends 'main/generic.html' %}
 {% block content %}
-{{ media }}
+<div class="row my-5">
+    <div class="col-lg-4 col-md-5 mb-3">
+        <img class="img-fluid" width="100%" src="https://image.tmdb.org/t/p/w500{{media.backdrop_path}}" />
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">{{ media.title}} {{media.name}}</h5>
+                <small>{{ media.tagline }} </small>
+            </div>
+            <div class="card-body">
+                    <p><strong>Genres : </strong> 
+                        {% for genre in media.genres %}
+                        {{ genre.name }}/
+                        {% endfor %}
+                    </p>
+
+                    {% if media.release_date %}
+                    <p><strong>Realease date : </strong>{{ media.release_date }} </p>
+                    {% else %}
+                    <p><strong>First air date : </strong>{{ media.first_air_date }} </p>
+                    <p><strong>Last air date : </strong>{{ media.last_air_date }} </p>
+                    {% endif %}
+
+                    <p><strong>Vote : </strong>{{ media.vote_average }} </p>
+
+                    {% if media.spoken_languages %}
+                    <p><strong>Languages spoken : </strong> 
+                        {% for lang in media.spoken_languages %}
+                        {{ lang.name }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+
+                    {% if media.media_type == 'tv' %}
+                    <p><strong>Number of saisons : </strong>{{ media.number_of_seasons }} </p>
+                    <p><strong>Number of episodes : </strong>{{ media.number_of_episodes }} </p>
+                    {% endif %}
+                    
+                    <p class="col-lg-10 px-0">{{ media.overview }} </p>
+
+                    {% if media.homepage %}
+                    <a class="btn btn-info" target="_blank" href="{{media.homepage}}">Website</a>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
