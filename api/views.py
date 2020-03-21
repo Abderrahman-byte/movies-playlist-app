@@ -10,7 +10,7 @@ import json
 from datetime import datetime
 
 # Create your views here.
-from main.models import Playlist
+from main.models import Playlist, PlaylistItem
 
 def trendingApi(request) :
     page = request.GET.get('page', 1)
@@ -97,3 +97,20 @@ def PlaylistLiteView(request) :
 
     context = json.dumps(context)
     return HttpResponse(context, content_type='application/json')
+
+@csrf_exempt
+def addToPlaylistView(request, id) :
+    if request.method == 'POST' :
+        body = json.loads(request.body)
+        print(body)
+        item_id = body['item_id']
+        media_type = body['media_type']
+
+        try :
+            playlist = Playlist.objects.get(pk=id)
+            PlaylistItem(item_id=item_id, media_type=media_type, playlist=playlist).save()
+            print('item added')
+        except :
+            pass
+
+        return HttpResponse('Done', 201)

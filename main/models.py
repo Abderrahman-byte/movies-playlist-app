@@ -6,7 +6,7 @@ import uuid
 # Create your models here.
 class Profil(models.Model) :
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -46,5 +46,9 @@ class PlaylistItem(models.Model) :
     media_type = models.CharField(max_length=200, choices=MEDIA_TYPE, default='movie')
     created_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['playlist', 'item_id', 'media_type'], name='non_duplicate_items_in_playlist')
+        ]
     def __str__(self) :
         return f'{self.media_type} id {self.item_id} in {self.playlist.title}'
